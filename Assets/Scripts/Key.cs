@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +6,8 @@ using UnityEngine.UI;
 public class Key : MonoBehaviour {
 
     public Image interactionText;
-    private float interactionDistance = 5.0f;
-
+    public float interactionDistance = 5.0f;
+    
     private Transform playerTransform;
     public static bool keyPickedUp = false;
 
@@ -25,11 +24,14 @@ public class Key : MonoBehaviour {
         if (distance <= interactionDistance)
         {
             interactionText.gameObject.SetActive(true);
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 PickUp();
+                interactionText.gameObject.SetActive(false);
             }
         }
+
         else
         {
             interactionText.gameObject.SetActive(false);
