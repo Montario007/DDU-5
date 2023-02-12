@@ -10,6 +10,7 @@ public class Keypad : MonoBehaviour
     [SerializeField] private int maxLength = 3;
     [SerializeField] private float displayTime = 2.0f;
     [SerializeField] private GameObject uiImage;
+    [SerializeField] private Animator myAnimationController;
 
     private string Answer = "487";
     private float timeLeft;
@@ -44,6 +45,8 @@ public class Keypad : MonoBehaviour
             CharacterController characterController = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
             characterController.enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
+            myAnimationController.SetBool("open", false);
+
         }
         else
         {
