@@ -7,13 +7,18 @@ public class Key : MonoBehaviour {
 
     public Image interactionText;
     public float interactionDistance = 5.0f;
-    
+    [SerializeField] private AudioSource key;
+    [SerializeField] private AudioSource voice;
+    [SerializeField] private float delay = 4.0f;
     private Transform playerTransform;
+    private CharacterController characterController;
+    private bool wasCharacterControllerEnabled;
     public static bool keyPickedUp = false;
 
     private void Start()
     {
         playerTransform = GameObject.FindWithTag("Player").transform;
+        characterController = playerTransform.GetComponent<CharacterController>();
         interactionText.gameObject.SetActive(false);
     }
 
@@ -25,10 +30,14 @@ public class Key : MonoBehaviour {
         {
             interactionText.gameObject.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Q) && keyPickedUp == false)
             {
-                PickUp();
-                interactionText.gameObject.SetActive(false);
+                key.Play();
+                voice.Play();
+                keyPickedUp = true;
+                wasCharacterControllerEnabled = characterController.enabled;
+                characterController.enabled = false;
+                StartCoroutine(keypickup());
             }
         }
 
@@ -41,7 +50,14 @@ public class Key : MonoBehaviour {
     private void PickUp()
     {
         Destroy(gameObject);
-        keyPickedUp = true;
+    }
+    private IEnumerator keypickup()
+    {
+        yield return new WaitForSeconds(delay);
+        PickUp();
+        interactionText.gameObject.SetActive(false);
+        characterController.enabled = wasCharacterControllerEnabled;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 }

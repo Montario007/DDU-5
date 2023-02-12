@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Keypad : MonoBehaviour
 {
@@ -11,8 +12,12 @@ public class Keypad : MonoBehaviour
     [SerializeField] private float displayTime = 2.0f;
     [SerializeField] private GameObject uiImage;
     [SerializeField] private Animator myAnimationController;
-
-    private string Answer = "487";
+    [SerializeField] private float delay = 4.0f;
+    [SerializeField] private AudioSource button;
+    [SerializeField] private AudioSource door;
+    [SerializeField] private AudioSource wrong;
+    
+    private string Answer = "784";
     private float timeLeft;
     public static bool keypadUnlocked = true;
 
@@ -33,6 +38,7 @@ public class Keypad : MonoBehaviour
         if (Ans.text.Length < maxLength)
         {
             Ans.text += number.ToString();
+            button.Play();
         }
     }
     public void Execute()
@@ -41,17 +47,27 @@ public class Keypad : MonoBehaviour
         {
             Ans.text = "Correct";
             keypadUnlocked = false;
-            uiImage.SetActive(false);
-            CharacterController characterController = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
-            characterController.enabled = true;
-            Cursor.lockState = CursorLockMode.Locked;
+            door.Play();
             myAnimationController.SetBool("open", false);
-
+            StartCoroutine(OpenDoorWithDelay());
         }
         else
         {
             Ans.text = "Invalid";
             timeLeft = displayTime;
+            wrong.Play();
         }
-    }   
+    }
+    private IEnumerator OpenDoorWithDelay()
+    {
+        yield return new WaitForSeconds(delay);
+        uiImage.SetActive(false);
+        CharacterController characterController = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
+        characterController.enabled = true;
+        win();
+    }
+    public void win()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 }

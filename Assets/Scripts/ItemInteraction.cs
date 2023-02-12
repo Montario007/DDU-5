@@ -11,6 +11,7 @@ public class ItemInteraction : MonoBehaviour
     private Transform playerTransform;
     private CharacterController characterController;
     private bool wasCharacterControllerEnabled;
+    [SerializeField] private AudioSource keypad;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class ItemInteraction : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                keypad.Play();
                 Cursor.lockState = CursorLockMode.None;
                 uiImage.gameObject.SetActive(!uiImage.gameObject.activeSelf);
                 if (uiImage.gameObject.activeSelf)

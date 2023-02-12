@@ -8,10 +8,10 @@ public class PaperOpen : MonoBehaviour
     public Image uiImage;
     public Image interactionText;
     public float interactionDistance = 5.0f;
-
     private Transform playerTransform;
     private CharacterController characterController;
     private bool wasCharacterControllerEnabled;
+    [SerializeField] private AudioSource paper;
 
     private void Start()
     {
@@ -31,6 +31,7 @@ public class PaperOpen : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                paper.Play();
                 uiImage.gameObject.SetActive(!uiImage.gameObject.activeSelf);
                 if (uiImage.gameObject.activeSelf)
                 {
